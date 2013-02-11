@@ -13,11 +13,13 @@ import org.junit.Test;
 
 public class RouletteTest {
 
+    private static final int UPPERLIMIT_FOR_RANDOM_36 = 37;
+
     @Test public void 
     test_behaviour_of_random() throws Exception {
         List<Integer> list = new ArrayList<Integer>();
         for (int i = 0; i < 10000; i++) {
-            int nextInt = new Random().nextInt(37);
+            int nextInt = new Random().nextInt(UPPERLIMIT_FOR_RANDOM_36);
             list.add(nextInt);
             assertThat(nextInt).isGreaterThanOrEqualTo(0);
             assertThat(nextInt).isLessThanOrEqualTo(36);
@@ -29,16 +31,17 @@ public class RouletteTest {
     @Test
     public void it_returns_a_random_number_that_can_be_0() {
         Random mock = mock(Random.class);
-        when(mock.nextInt()).thenReturn(0);
+        when(mock.nextInt(UPPERLIMIT_FOR_RANDOM_36)).thenReturn(0);
         Roulette roulette = new Roulette(mock);
         
         Integer expected = 0;
         assertEquals(expected, roulette.play());
     }
+    
     @Test
     public void it_returns_a_random_number_that_can_be_37() {
         Random mock = mock(Random.class);
-        when(mock.nextInt()).thenReturn(36);
+        when(mock.nextInt(UPPERLIMIT_FOR_RANDOM_36)).thenReturn(36);
         Roulette roulette = new Roulette(mock);
         
         Integer expected = 36;
@@ -54,7 +57,7 @@ public class RouletteTest {
         }
 
         public Integer play() {
-            return random.nextInt();
+            return random.nextInt(37);
         }
         
     }
