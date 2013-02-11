@@ -3,6 +3,7 @@ package roulette;
 import static org.fest.assertions.api.Assertions.assertThat;
 import static org.junit.Assert.*;
 import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 import java.util.ArrayList;
@@ -12,6 +13,15 @@ import java.util.Random;
 import org.junit.Test;
 
 public class RouletteTest {
+
+    public static class BallDelay {
+
+        public void waitForBall() {
+            // TODO Auto-generated method stub
+            
+        }
+
+    }
 
     private static final int UPPERLIMIT_FOR_RANDOM_36 = 37;
 
@@ -28,35 +38,42 @@ public class RouletteTest {
         assertThat(list).contains(0);
     }
     
+    private Random mock = mock(Random.class);
+    BallDelay ballDelay = mock(BallDelay.class);
+    private Roulette roulette = new Roulette(mock, ballDelay);
+    
     @Test
     public void it_returns_a_random_number_that_can_be_0() {
-        Random mock = mock(Random.class);
         when(mock.nextInt(UPPERLIMIT_FOR_RANDOM_36)).thenReturn(0);
-        Roulette roulette = new Roulette(mock);
-        
         Integer expected = 0;
         assertEquals(expected, roulette.play());
     }
-    
+
     @Test
     public void it_returns_a_random_number_that_can_be_37() {
-        Random mock = mock(Random.class);
         when(mock.nextInt(UPPERLIMIT_FOR_RANDOM_36)).thenReturn(36);
-        Roulette roulette = new Roulette(mock);
-        
         Integer expected = 36;
         assertEquals(expected, roulette.play());
+    }
+    
+    @Test public void 
+    the_ball_rolls_for_a_while_before_stopping() throws Exception {
+        roulette.play();
+        verify(ballDelay).waitForBall();
     }
     
     public static class Roulette {
 
         private Random random;
+        private BallDelay delay;
 
-        public Roulette(Random random) {
+        public Roulette(Random random, BallDelay ballDelay) {
             this.random = random;
+            delay = ballDelay;
         }
 
         public Integer play() {
+            delay.waitForBall();
             return random.nextInt(37);
         }
         
