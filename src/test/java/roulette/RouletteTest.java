@@ -1,7 +1,7 @@
 package roulette;
 
 import static org.fest.assertions.api.Assertions.assertThat;
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -13,6 +13,38 @@ import java.util.Random;
 import org.junit.Test;
 
 public class RouletteTest {
+
+    public static class Result {
+
+        private int i;
+
+        public Result(int i) {
+            this.i = i;
+        }
+
+        @Override
+        public int hashCode() {
+            final int prime = 31;
+            int result = 1;
+            result = prime * result + i;
+            return result;
+        }
+
+        @Override
+        public boolean equals(Object obj) {
+            if (this == obj)
+                return true;
+            if (obj == null)
+                return false;
+            if (getClass() != obj.getClass())
+                return false;
+            Result other = (Result) obj;
+            if (i != other.i)
+                return false;
+            return true;
+        }
+        
+    }
 
     public static class BallDelay {
 
@@ -43,22 +75,30 @@ public class RouletteTest {
     private Roulette roulette = new Roulette(mock, ballDelay);
     
     @Test
-    public void it_returns_a_random_number_that_can_be_0() {
+    public void it_returns_a_result_that_can_be_0() {
         when(mock.nextInt(UPPERLIMIT_FOR_RANDOM_36)).thenReturn(0);
-        Integer expected = 0;
-        assertEquals(expected, roulette.play());
+        assertEquals(result("0"), roulette.play2());
+    }
+
+    private Result result(String string) {
+        return new Result(Integer.valueOf(string));
     }
 
     @Test
-    public void it_returns_a_random_number_that_can_be_37() {
+    public void it_returns_a_result_number_that_can_be_37() {
         when(mock.nextInt(UPPERLIMIT_FOR_RANDOM_36)).thenReturn(36);
-        Integer expected = 36;
-        assertEquals(expected, roulette.play());
+        assertEquals(result("36"), roulette.play2());
+    }
+    
+    @Test
+    public void it_returns_a_result_that_can_be_00() {
+        when(mock.nextInt(UPPERLIMIT_FOR_RANDOM_36)).thenReturn(0);
+        assertEquals(result("00"), roulette.play2());
     }
     
     @Test public void 
     the_ball_rolls_for_a_while_before_stopping() throws Exception {
-        roulette.play();
+        roulette.play2();
         verify(ballDelay).waitForBall();
     }
     
@@ -72,7 +112,11 @@ public class RouletteTest {
             delay = ballDelay;
         }
 
-        public Integer play() {
+        public Object play2() {
+            return new Result(play());
+        }
+
+        private Integer play() {
             delay.waitForBall();
             return random.nextInt(37);
         }
