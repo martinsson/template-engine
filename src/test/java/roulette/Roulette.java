@@ -14,13 +14,24 @@ public class Roulette {
         delay = ballDelay;
     }
 
-    public Result play2() {
-        return new Result(String.valueOf(play()));
+    public Result play() {
+        Integer result = getResult();
+        return new Result(translateResult(result));
     }
 
-    private Integer play() {
+    public String translateResult(Integer result) {
+        String translatedResult;
+        if (result == 37) {
+            translatedResult = "00";
+        } else {
+            translatedResult = String.valueOf(result);
+        }
+        return translatedResult;
+    }
+
+    private Integer getResult() {
         delay.waitForBall();
-        return random.nextInt(37);
+        return random.nextInt(38);
     }
     
 }

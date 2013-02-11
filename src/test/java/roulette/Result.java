@@ -8,6 +8,14 @@ public class Result {
         this.s = string;
     }
     
+    
+
+    @Override
+    public String toString() {
+        return "Result [s=" + s + "]";
+    }
+
+
 
     @Override
     public int hashCode() {

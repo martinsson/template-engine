@@ -24,7 +24,7 @@ public class RouletteTest {
 
     }
 
-    private static final int UPPERLIMIT_FOR_RANDOM_36 = 37;
+    private static final int UPPERLIMIT_FOR_RANDOM_36 = 38;
 
     @Test public void 
     test_behaviour_of_random() throws Exception {
@@ -33,7 +33,7 @@ public class RouletteTest {
             int nextInt = new Random().nextInt(UPPERLIMIT_FOR_RANDOM_36);
             list.add(nextInt);
             assertThat(nextInt).isGreaterThanOrEqualTo(0);
-            assertThat(nextInt).isLessThanOrEqualTo(36);
+            assertThat(nextInt).isLessThanOrEqualTo(37);
         }
         assertThat(list).contains(36);
         assertThat(list).contains(0);
@@ -46,7 +46,7 @@ public class RouletteTest {
     @Test
     public void it_returns_a_result_that_can_be_0() {
         when(mock.nextInt(UPPERLIMIT_FOR_RANDOM_36)).thenReturn(0);
-        assertEquals(result("0"), roulette.play2());
+        assertEquals(result("0"), roulette.play());
     }
 
     private Result result(String string) {
@@ -56,18 +56,18 @@ public class RouletteTest {
     @Test
     public void it_returns_a_result_number_that_can_be_37() {
         when(mock.nextInt(UPPERLIMIT_FOR_RANDOM_36)).thenReturn(36);
-        assertEquals(result("36"), roulette.play2());
+        assertEquals(result("36"), roulette.play());
     }
     
-    @Test @Ignore
+    @Test 
     public void it_returns_a_result_that_can_be_00() {
-        when(mock.nextInt(UPPERLIMIT_FOR_RANDOM_36)).thenReturn(0);
-        assertEquals(result("00"), roulette.play2());
+        when(mock.nextInt(38)).thenReturn(37);
+        assertEquals(result("00"), roulette.play());
     }
     
     @Test public void 
     the_ball_rolls_for_a_while_before_stopping() throws Exception {
-        roulette.play2();
+        roulette.play();
         verify(ballDelay).waitForBall();
     }
 
