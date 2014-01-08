@@ -2,8 +2,6 @@ package roulette;
 
 import java.util.Random;
 
-import roulette.RouletteTest.BallDelay;
-
 public class Roulette {
 
     private Random random;

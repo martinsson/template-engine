@@ -15,15 +15,6 @@ import org.junit.Test;
 
 public class RouletteTest {
 
-    public static class BallDelay {
-
-        public void waitForBall() {
-            // TODO Auto-generated method stub
-            
-        }
-
-    }
-
     private static final int UPPERLIMIT_FOR_RANDOM_36 = 38;
 
     @Test public void 
